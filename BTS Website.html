@@ -1,0 +1,867 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light">
+<title>Behind the Screens, Asian American Subgroups Across Tech-Related Fields</title>
+<meta name="description" content="Education, income and advanced STEM degree data for Asian American subgroups, shown next to the combined Asian American figures.">
+<style>
+  :root {
+    color-scheme: light;
+    --ink: #1c2330;
+    --muted: #586170;
+    --line: #dde1e7;
+    --paper: #ffffff;
+    --tint: #eef2f7;
+    --us: #a4abb5;
+    --combined: #1f3d63;
+    --sub: #5b86b8;
+    --pop: #b9cce2;
+    --serif: "Iowan Old Style", "Palatino Linotype", Palatino, "Book Antiqua", Charter, "Bitstream Charter", Georgia, serif;
+    --sans: "Avenir Next", "Segoe UI", system-ui, -apple-system, Roboto, "Helvetica Neue", Arial, sans-serif;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; }
+  [hidden] { display: none !important; }
+
+  html { -webkit-text-size-adjust: 100%; }
+
+  body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: var(--serif);
+    font-size: 1.0625rem;
+    line-height: 1.7;
+  }
+
+  .wrap {
+    max-width: 47rem;
+    margin: 0 auto;
+    padding: 0 1.25rem;
+  }
+
+  a { color: var(--combined); text-underline-offset: 0.15em; }
+  a:hover { color: var(--ink); }
+
+  :focus-visible {
+    outline: 2px solid var(--ink);
+    outline-offset: 3px;
+  }
+
+  .sr-only {
+    position: absolute;
+    width: 1px; height: 1px;
+    margin: -1px; padding: 0;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+    border: 0;
+  }
+
+  /* Header */
+  .site-header {
+    border-top: 6px solid var(--combined);
+    border-bottom: 1px solid var(--line);
+    padding: 3rem 0 2rem;
+  }
+  .site-header h1 {
+    margin: 0;
+    font-family: var(--sans);
+    font-weight: 700;
+    font-size: clamp(2.4rem, 8vw, 3.75rem);
+    line-height: 1.02;
+    letter-spacing: -0.025em;
+  }
+  .subtitle {
+    margin: 0.6rem 0 0;
+    font-family: var(--sans);
+    font-size: clamp(1.1rem, 3.4vw, 1.4rem);
+    font-weight: 500;
+    line-height: 1.3;
+  }
+  .byline {
+    margin: 1.25rem 0 0;
+    font-family: var(--sans);
+    font-size: 0.95rem;
+    line-height: 1.5;
+    color: var(--muted);
+  }
+  .byline strong { color: var(--ink); font-weight: 600; }
+
+  /* Text */
+  main { padding-bottom: 3rem; }
+  .intro {
+    font-size: 1.2rem;
+    line-height: 1.65;
+    margin: 2rem 0 0;
+  }
+  h2 {
+    font-family: var(--sans);
+    font-size: 1.5rem;
+    font-weight: 650;
+    line-height: 1.25;
+    letter-spacing: -0.01em;
+    margin: 3.25rem 0 0.5rem;
+  }
+  h3 {
+    font-family: var(--sans);
+    font-size: 1rem;
+    font-weight: 650;
+    margin: 1.25rem 0 0.25rem;
+  }
+  p { margin: 0.75rem 0; }
+  .lede { margin-top: 0.25rem; }
+
+  /* Controls */
+  .controls {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem 1rem;
+    align-items: center;
+    justify-content: space-between;
+    margin: 1.25rem 0 0.75rem;
+    font-family: var(--sans);
+  }
+  .seg {
+    display: inline-flex;
+    border: 1px solid var(--combined);
+    border-radius: 6px;
+    overflow: hidden;
+  }
+  .seg button, .toggle {
+    font: inherit;
+    font-size: 0.95rem;
+    line-height: 1.2;
+    padding: 0.6rem 0.9rem;
+    cursor: pointer;
+  }
+  .seg button {
+    background: var(--paper);
+    color: var(--combined);
+    border: 0;
+  }
+  .seg button + button { border-left: 1px solid var(--combined); }
+  .seg button[aria-pressed="true"] {
+    background: var(--tint);
+    font-weight: 650;
+    color: var(--ink);
+  }
+  .toggle {
+    background: var(--combined);
+    color: #fff;
+    border: 1px solid var(--combined);
+    border-radius: 6px;
+    font-weight: 600;
+  }
+  .toggle:hover { background: #18304f; }
+
+  /* Charts */
+  .chart {
+    margin: 0;
+    padding: 1.1rem 1.1rem 1.25rem;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    font-family: var(--sans);
+  }
+  .chart figcaption { margin-bottom: 0.75rem; }
+  .chart-title {
+    display: block;
+    font-size: 1.05rem;
+    font-weight: 650;
+    line-height: 1.3;
+  }
+  .chart-sub {
+    display: block;
+    font-size: 0.9rem;
+    color: var(--muted);
+    line-height: 1.4;
+    margin-top: 0.15rem;
+  }
+
+  .legend {
+    list-style: none;
+    margin: 0 0 0.9rem;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem 1.1rem;
+    font-size: 0.85rem;
+    color: var(--muted);
+    line-height: 1.35;
+  }
+  .legend li { display: inline-flex; align-items: center; gap: 0.4rem; }
+  .sw {
+    display: inline-block;
+    width: 1.1rem;
+    height: 0.75rem;
+    flex: none;
+  }
+  .sw.dash {
+    width: 0.6rem;
+    height: 1rem;
+    border-left: 2px dashed var(--ink);
+    margin-left: 0.4rem;
+  }
+
+  .bars {
+    --valspace: 4.4em;
+    display: grid;
+    grid-template-columns: minmax(6.75rem, 11rem) minmax(0, 1fr);
+    column-gap: 0.75rem;
+    font-size: 0.9rem;
+  }
+  .lab {
+    grid-column: 1;
+    align-self: center;
+    text-align: right;
+    line-height: 1.25;
+    padding: 0.3rem 0;
+  }
+  .lab.ref-lab { font-weight: 600; }
+  .track {
+    grid-column: 2;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 0.2rem;
+    padding: 0.3rem var(--valspace) 0.3rem 0;
+  }
+  .scale {
+    position: relative;
+    width: 100%;
+    height: 1.05rem;
+  }
+  .pairs .scale { height: 0.85rem; }
+  .pairs .track { gap: 0.3rem; }
+  .pairs .lab, .pairs .track { padding-top: 0.45rem; padding-bottom: 0.45rem; }
+  .bar {
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    min-width: 2px;
+    border-radius: 0 2px 2px 0;
+  }
+  .val {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 3;
+    margin-left: 0.25rem;
+    padding: 0 0.2rem;
+    background: #fff;
+    border-radius: 2px;
+    white-space: nowrap;
+    font-variant-numeric: tabular-nums;
+    font-size: 0.85rem;
+    line-height: 1.2;
+  }
+  .dagger { font-weight: 700; }
+  .bars[data-format="dollars"] { --valspace: 5.6em; }
+  .bars.pairs { --valspace: 3.6em; }
+
+  .us { background: var(--us); }
+  .combined { background: var(--combined); }
+  .sub { background: var(--sub); }
+  .small {
+    background: repeating-linear-gradient(135deg, var(--sub) 0 2px, #fff 2px 5px);
+    box-shadow: inset 0 0 0 1px var(--sub);
+  }
+  .pop { background: var(--pop); box-shadow: inset 0 0 0 1px #8fa9c8; }
+  .stem { background: var(--combined); }
+
+  .sep {
+    grid-column: 1 / -1;
+    border-top: 1px solid var(--line);
+    margin: 0.4rem 0;
+  }
+  .ref {
+    grid-column: 2;
+    position: relative;
+    pointer-events: none;
+    z-index: 2;
+  }
+  .ref-line {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    margin-left: -1px;
+    border-left: 2px dashed var(--ink);
+  }
+
+  .chart-notes {
+    font-family: var(--sans);
+    font-size: 0.875rem;
+    line-height: 1.55;
+    color: var(--muted);
+    margin-top: 0.75rem;
+  }
+  .chart-notes p { margin: 0.4rem 0; }
+  .missing {
+    font-family: var(--sans);
+    font-size: 0.95rem;
+    line-height: 1.55;
+    margin-top: 0.25rem;
+  }
+
+  /* Sources */
+  .sources {
+    list-style: none;
+    margin: 1rem 0 0;
+    padding: 0;
+  }
+  .sources li {
+    display: grid;
+    grid-template-columns: 2.6rem minmax(0, 1fr);
+    gap: 0.5rem;
+    padding: 0.8rem 0;
+    border-top: 1px solid var(--line);
+    scroll-margin-top: 1rem;
+  }
+  .sources li:last-child { border-bottom: 1px solid var(--line); }
+  .sources li:target { background: var(--tint); }
+  .sid {
+    font-family: var(--sans);
+    font-weight: 650;
+    font-size: 0.9rem;
+    color: var(--muted);
+    padding-top: 0.15rem;
+  }
+  .src-title { font-weight: 600; overflow-wrap: anywhere; }
+  .src-meta, .src-use {
+    display: block;
+    font-family: var(--sans);
+    font-size: 0.875rem;
+    line-height: 1.5;
+    margin-top: 0.2rem;
+  }
+  .src-use { color: var(--muted); }
+
+  /* Coming soon */
+  .soon { padding-left: 1.2rem; }
+  .soon li { margin: 0.45rem 0; }
+
+  footer {
+    border-top: 1px solid var(--line);
+    padding: 1.5rem 0 2.5rem;
+    font-family: var(--sans);
+    font-size: 0.875rem;
+    color: var(--muted);
+    line-height: 1.5;
+  }
+
+  @media (max-width: 34rem) {
+    body { font-size: 1rem; }
+    .wrap { padding: 0 1rem; }
+    .site-header { padding: 2.25rem 0 1.5rem; }
+    .intro { font-size: 1.1rem; }
+    h2 { font-size: 1.3rem; margin-top: 2.75rem; }
+    .controls { flex-direction: column; align-items: stretch; }
+    .seg { display: flex; }
+    .seg button { flex: 1; }
+    .chart { padding: 0.9rem 0.7rem 1rem; }
+    .bars {
+      grid-template-columns: minmax(5.5rem, 6.75rem) minmax(0, 1fr);
+      column-gap: 0.5rem;
+      font-size: 0.875rem;
+    }
+    .val { font-size: 0.8rem; padding: 0 0.15rem; margin-left: 0.15rem; }
+    .bars[data-format="dollars"] { --valspace: 4.9em; }
+    .bars { --valspace: 4em; }
+    .bars.pairs { --valspace: 3.3em; }
+  }
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrap">
+    <h1>Behind the Screens</h1>
+    <p class="subtitle">Asian American Subgroups Across Tech-Related Fields</p>
+    <p class="byline"><strong>Lawrence Novilla and Nimai Kasibatla</strong><br>CSE 194, UC San Diego, Fall 2026</p>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <p class="intro">Reports on education, income and jobs, including jobs in tech, usually list Asian Americans as a single group. That one figure combines people whose families come from many different countries, and it can hide large differences between those subgroups. This site places the combined figure next to the figures for each subgroup, using published data from the sources listed at the end of the page.</p>
+
+  <section aria-labelledby="groups-h">
+    <h2 id="groups-h">Education and income, combined and by subgroup</h2>
+    <p class="lede">Choose a measure, then split the combined Asian American bar into the subgroups it includes.</p>
+
+    <div class="controls">
+      <div class="seg" role="group" aria-label="Measure shown in the chart">
+        <button type="button" data-measure="degree" aria-pressed="true">Bachelor’s degree</button>
+        <button type="button" data-measure="income" aria-pressed="false">Household income</button>
+      </div>
+      <button type="button" class="toggle" id="split-toggle" aria-controls="group-bars">Split into subgroups</button>
+    </div>
+
+    <figure class="chart">
+      <figcaption>
+        <span class="chart-title" id="group-title"></span>
+        <span class="chart-sub" id="group-sub"></span>
+      </figcaption>
+      <ul class="legend" aria-label="Chart key">
+        <li><span class="sw us"></span><span>All U.S.</span></li>
+        <li><span class="sw combined"></span><span>Asian American, combined</span></li>
+        <li data-split-only hidden><span class="sw sub"></span><span>Subgroup</span></li>
+        <li data-split-only hidden><span class="sw small"></span><span>Subgroup under <span data-fill="threshold"></span> people</span></li>
+        <li><span class="sw dash"></span><span>Dashed line marks the combined Asian American figure</span></li>
+      </ul>
+      <div class="bars" id="group-bars"></div>
+      <p class="sr-only" id="group-status" aria-live="polite"></p>
+    </figure>
+
+    <div class="chart-notes" id="group-notes"></div>
+
+    <h3>Groups with no figure for this measure</h3>
+    <p class="missing" id="group-missing"></p>
+  </section>
+
+  <section aria-labelledby="stem-h">
+    <h2 id="stem-h">Who holds advanced STEM degrees</h2>
+    <p class="lede">Each group’s share of the U.S. Asian population, shown next to its share of Asian Americans who hold an advanced degree in a STEM field.</p>
+
+    <figure class="chart">
+      <figcaption>
+        <span class="chart-title">Share of the Asian American population and share of advanced STEM degree holders, <span data-fill="stemYear"></span></span>
+        <span class="chart-sub">Each of the two shares adds up to 100% across the groups shown</span>
+      </figcaption>
+      <ul class="legend" aria-label="Chart key">
+        <li><span class="sw pop"></span><span>Share of the U.S. Asian population</span></li>
+        <li><span class="sw stem"></span><span>Share of Asian Americans with an advanced STEM degree</span></li>
+      </ul>
+      <div class="bars pairs" id="stem-bars"></div>
+    </figure>
+
+    <div class="chart-notes">
+      <p>This chart counts master’s and PhD degrees only, in computer, math, engineering and science fields. Bachelor’s degrees are not included (<a href="#s8">S8</a>).</p>
+      <p>When bachelor’s degrees are included, Chinese and Indian Americans are <span data-fill="bachChineseIndian"></span> of Asian American STEM degree holders, and Filipino and Vietnamese Americans are <span data-fill="bachFilipinoVietnamese"></span> (<a href="#s8">S8</a>).</p>
+      <p>“Other groups” covers everyone outside the six largest groups, and its population share is the remainder after those six. Population shares are from Pew Research Center (<a href="#s1">S1</a>). Degree shares are from Vinluan and Kraus, based on the 2023 Current Population Survey (<a href="#s8">S8</a>).</p>
+    </div>
+  </section>
+
+  <section aria-labelledby="why-h">
+    <h2 id="why-h">Why the groups get combined</h2>
+    <p>Federal standards for race data define Asian as one of a few broad minimum categories, and many surveys and reports publish results only at that level. Smaller groups also have few people in any single year of survey data, which makes their estimates less reliable. Pew Research Center handles this by pooling three years of American Community Survey data, 2021 to 2023, for its group fact sheets (<a href="#s2">S2</a>, <a href="#s4">S4</a>). Regular reports on jobs tend to stay broader. The Bureau of Labor Statistics reports only the largest Asian groups separately and places the rest in an Other Asian category (<a href="#s6">S6</a>), and the tech and STEM job figures we found, from the Bureau of Labor Statistics, Pew Research Center and the National Science Board, report Asian workers as one group (<a href="#s7">S7</a>, <a href="#s9">S9</a>, <a href="#s10">S10</a>).</p>
+    <p>A combined figure puts everyone in one pool, so the largest groups shape it the most. Groups outside the six largest make up <span data-fill="otherPopShare"></span> of the Asian American population (<a href="#s1">S1</a>). Among the groups on this page, bachelor’s degree rates run from <span data-fill="degreeLow"></span> to <span data-fill="degreeHigh"></span>, compared with <span data-fill="degreeCombined"></span> for Asian Americans combined. Median household income runs from <span data-fill="incomeLow"></span> to <span data-fill="incomeHigh"></span>, compared with <span data-fill="incomeCombined"></span> combined (<a href="#s1">S1</a>, <a href="#s2">S2</a>, <a href="#s5">S5</a>). The combined number describes Asian Americans as a whole, and it can sit far from the figure for any one group.</p>
+  </section>
+
+  <section aria-labelledby="sources-h">
+    <h2 id="sources-h">Sources</h2>
+    <p class="lede">Source IDs match the project’s shared data spreadsheet. The line under each source says what it was used for.</p>
+    <ul class="sources" id="source-list"></ul>
+  </section>
+
+  <section aria-labelledby="soon-h">
+    <h2 id="soon-h">Coming soon</h2>
+    <ul class="soon">
+      <li><strong>Degree and income scatter plot.</strong> Each group’s bachelor’s degree rate plotted against its median household income.</li>
+      <li><strong>Full data table.</strong> Every figure on this site in one table, with its source.</li>
+      <li><strong>Guide to which ethnic groups have data.</strong> Every ethnic group we searched for and whether any U.S. data exists for it.</li>
+      <li><strong>Subgroup histories.</strong> Short backgrounds on each group in the United States.</li>
+      <li><strong>Limits of the data.</strong> What these sources can and cannot tell us.</li>
+    </ul>
+  </section>
+
+  <noscript><p>The charts and source list on this page need JavaScript turned on.</p></noscript>
+</main>
+
+<footer>
+  <div class="wrap">
+    Data last updated <span data-fill="lastUpdated"></span>. Every number on this site comes from the project’s shared data spreadsheet.
+  </div>
+</footer>
+
+<script>
+/* =====================================================================
+   SITE DATA
+   Every number on this page comes from the shared spreadsheet
+   "Behind the Screens Data". To update the site, edit the values here.
+   - Percentages are decimals (0.56 shows as 56%).
+   - Use null for a figure that has not been published.
+   - Source IDs (S1, S2 ...) match the Sources tab and the sources list.
+   ===================================================================== */
+const SITE_DATA = {
+  lastUpdated: "November 2026",
+
+  // Groups below this population get a hatched bar (Subgroup Data tab, column D)
+  smallPopulationThreshold: 100000,
+
+  // Values from this source get a dagger in the chart
+  daggerSource: "S5",
+
+  /* ---------- Subgroup Data tab ---------- */
+  subgroupData: {
+    allUS: {
+      name: "All U.S.",
+      degree: 0.36, degreeSource: "S1",
+      income: 75500, incomeSource: "S1"
+    },
+    combined: {
+      name: "Asian American, combined",
+      population: 24210000,
+      degree: 0.56, degreeSource: "S1",
+      income: 105600, incomeSource: "S1"
+    },
+    // population = Population (2023), source S3
+    // aloneOrInCombination = Pew counts people who report this origin alone
+    // or with another race or origin (true), or alone only (false), per S4
+    groups: [
+      { name: "Chinese",     region: "East Asia",      population: 5040000, aloneOrInCombination: true,  degree: 0.58, degreeSource: "S2", income: 102800, incomeSource: "S2" },
+      { name: "Indian",      region: "South Asia",     population: 4860000, aloneOrInCombination: true,  degree: 0.77, degreeSource: "S2", income: 151200, incomeSource: "S2" },
+      { name: "Filipino",    region: "Southeast Asia", population: 4240000, aloneOrInCombination: true,  degree: 0.50, degreeSource: "S2", income: 106400, incomeSource: "S2" },
+      { name: "Vietnamese",  region: "Southeast Asia", population: 2150000, aloneOrInCombination: true,  degree: 0.36, degreeSource: "S2", income: 86000,  incomeSource: "S2" },
+      { name: "Korean",      region: "East Asia",      population: 1830000, aloneOrInCombination: true,  degree: 0.60, degreeSource: "S2", income: 93600,  incomeSource: "S2" },
+      { name: "Japanese",    region: "East Asia",      population: 1390000, aloneOrInCombination: true,  degree: 0.55, degreeSource: "S5", income: 99700,  incomeSource: "S2" },
+      { name: "Pakistani",   region: "South Asia",     population: 580000,  aloneOrInCombination: false, degree: 0.59, degreeSource: "S2", income: 108100, incomeSource: "S2" },
+      { name: "Hmong",       region: "Southeast Asia", population: 330000,  aloneOrInCombination: false, degree: 0.26, degreeSource: "S2", income: 85700,  incomeSource: "S2" },
+      { name: "Bangladeshi", region: "South Asia",     population: 270000,  aloneOrInCombination: false, degree: 0.50, degreeSource: "S5", income: null,   incomeSource: null },
+      { name: "Cambodian",   region: "Southeast Asia", population: 270000,  aloneOrInCombination: false, degree: 0.22, degreeSource: "S2", income: 83200,  incomeSource: "S2" },
+      { name: "Taiwanese",   region: "East Asia",      population: 260000,  aloneOrInCombination: true,  degree: 0.83, degreeSource: "S2", income: 133300, incomeSource: "S2" },
+      { name: "Nepalese",    region: "South Asia",     population: 225000,  aloneOrInCombination: false, degree: 0.50, degreeSource: "S5", income: 94800,  incomeSource: "S2" },
+      { name: "Burmese",     region: "Southeast Asia", population: 220000,  aloneOrInCombination: false, degree: 0.23, degreeSource: "S2", income: 67600,  incomeSource: "S2" },
+      { name: "Thai",        region: "Southeast Asia", population: 195000,  aloneOrInCombination: false, degree: 0.49, degreeSource: "S2", income: null,   incomeSource: null },
+      { name: "Laotian",     region: "Southeast Asia", population: 180000,  aloneOrInCombination: false, degree: 0.18, degreeSource: "S2", income: null,   incomeSource: null,
+        missingNote: { income: "Pew reports income only by nativity, $81,900 for immigrant-headed and $72,800 for U.S.-born-headed households" } },
+      { name: "Indonesian",  region: "Southeast Asia", population: 80000,   aloneOrInCombination: false, degree: 0.53, degreeSource: "S5", income: null,   incomeSource: null },
+      { name: "Sri Lankan",  region: "South Asia",     population: 65000,   aloneOrInCombination: false, degree: 0.61, degreeSource: "S2", income: 103000, incomeSource: "S2" },
+      { name: "Mongolian",   region: "East Asia",      population: 30000,   aloneOrInCombination: false, degree: 0.69, degreeSource: "S2", income: 54300,  incomeSource: "S2" },
+      { name: "Uzbek",       region: "Central Asia",   population: 25000,   aloneOrInCombination: false, degree: null, degreeSource: null, income: null,   incomeSource: null },
+      { name: "Malaysian",   region: "Southeast Asia", population: 24000,   aloneOrInCombination: false, degree: 0.63, degreeSource: "S2", income: 94100,  incomeSource: "S2" },
+      { name: "Kazakh",      region: "Central Asia",   population: 20000,   aloneOrInCombination: false, degree: 0.69, degreeSource: "S5", income: null,   incomeSource: null },
+      { name: "Mien",        region: "Southeast Asia", population: 19000,   aloneOrInCombination: false, degree: 0.21, degreeSource: "S5", income: null,   incomeSource: null },
+      { name: "Sikh",        region: "South Asia",     population: 16000,   aloneOrInCombination: false, degree: 0.55, degreeSource: "S5", income: null,   incomeSource: null },
+      { name: "Bhutanese",   region: "South Asia",     population: 14000,   aloneOrInCombination: false, degree: 0.15, degreeSource: "S5", income: null,   incomeSource: null }
+    ]
+  },
+
+  /* ---------- Tech and STEM tab ---------- */
+  techAndStem: {
+    year: 2023,
+    // populationShare = share of U.S. Asian population (S1)
+    // stemDegreeShare = share of Asian Americans holding a master's or PhD in a STEM field (S8)
+    groups: [
+      { name: "Indian",       populationShare: 0.21, stemDegreeShare: 0.50 },
+      { name: "Chinese",      populationShare: 0.22, stemDegreeShare: 0.32 },
+      { name: "Filipino",     populationShare: 0.19, stemDegreeShare: 0.02 },
+      { name: "Vietnamese",   populationShare: 0.09, stemDegreeShare: 0.02 },
+      { name: "Korean",       populationShare: 0.08, stemDegreeShare: 0.03 },
+      { name: "Japanese",     populationShare: 0.07, stemDegreeShare: 0.02 },
+      { name: "Other groups", populationShare: 0.14, stemDegreeShare: 0.09 } // population share is the remainder after the six largest groups
+    ],
+    // Shares of Asian STEM degree holders when bachelor's degrees are included (note on the Tech and STEM tab)
+    includingBachelors: {
+      chineseAndIndian: 0.70,
+      filipinoAndVietnamese: 0.11
+    }
+  },
+
+  /* ---------- Sources tab ---------- */
+  sources: [
+    { id: "S1",  title: "Key facts about Asians in the U.S.", publisher: "Pew Research Center", year: "2025", dataYears: "2021-23 ACS; 2023 ACS tables",
+      url: "https://www.pewresearch.org/short-reads/2025/05/01/key-facts-about-asians-in-the-us/",
+      usedFor: "Overall Asian and U.S. figures, population shares of the six largest groups" },
+    { id: "S2",  title: "Fact sheets on 22 Asian origin groups", publisher: "Pew Research Center", year: "2025", dataYears: "2021-23 ACS (IPUMS)",
+      url: "https://www.pewresearch.org/collections/asians-in-the-united-states/",
+      usedFor: "Degree rates, household income and personal earnings for each group" },
+    { id: "S3",  title: "U.S. Asian population detailed tables", publisher: "Pew Research Center", year: "2025", dataYears: "2021-23 ACS (IPUMS)",
+      url: "https://docs.google.com/spreadsheets/d/15Q_pSgevd60E5NunrTqJSbyKFqg4O6Vskfv9x56JqrM/",
+      usedFor: "Population of each group" },
+    { id: "S4",  title: "Fact sheet methodology", publisher: "Pew Research Center", year: "2025", dataYears: "n/a",
+      url: "https://www.pewresearch.org/race-and-ethnicity/2025/05/01/fact-sheets-asian-americans-methodology/",
+      usedFor: "How groups are defined (alone vs. alone or in combination)" },
+    { id: "S5",  title: "Education and the Model Minority Myth (reports AAPI Data 2025 education guide)", publisher: "Annie E. Casey Foundation", year: "2025", dataYears: "ACS",
+      url: "https://www.aecf.org/blog/education-and-the-model-minority-myth",
+      usedFor: "Degree rates not found in Pew (Japanese, Kazakh, Sikh, Indonesian, Bangladeshi, Nepalese, Mien, Bhutanese)" },
+    { id: "S6",  title: "U.S. Labor Force Characteristics of Asians, Native Hawaiians, and Other Pacific Islanders", publisher: "Bureau of Labor Statistics", year: "2024", dataYears: "2023 CPS annual averages",
+      url: "https://www.bls.gov/blog/2024/u-s-labor-force-characteristics-of-asians-native-hawaiians-and-other-pacific-islanders.htm",
+      usedFor: "Unemployment and employment rates for seven Asian groups" },
+    { id: "S7",  title: "Labor force characteristics by race and ethnicity, 2021", publisher: "Bureau of Labor Statistics", year: "2022", dataYears: "2021 CPS",
+      url: "https://www.bls.gov/opub/reports/race-and-ethnicity/2021/home.htm",
+      usedFor: "Asian share of computer and math jobs and of software developers" },
+    { id: "S8",  title: "The misperception of Asian subgroup representation in STEM (Vinluan and Kraus)", publisher: "Communications Psychology", year: "2026", dataYears: "2023 CPS ASEC",
+      url: "https://www.nature.com/articles/s44271-025-00389-1",
+      usedFor: "Which Asian groups hold advanced STEM degrees" },
+    { id: "S9",  title: "STEM Jobs See Uneven Progress in Increasing Gender, Racial and Ethnic Diversity", publisher: "Pew Research Center", year: "2021", dataYears: "2019 ACS",
+      url: "https://www.pewresearch.org/science/2021/04/01/stem-jobs-see-uneven-progress-in-increasing-gender-racial-and-ethnic-diversity/",
+      usedFor: "Asian share of computer workers (combined only)" },
+    { id: "S10", title: "STEM Labor Force indicators", publisher: "National Science Board / NCSES", year: "2026", dataYears: "2023 ACS",
+      url: "https://ncses.nsf.gov/pubs/nsb20261/stem-labor",
+      usedFor: "Asian share of workers in STEM (combined only)" },
+    { id: "S11", title: "Immigrants from Asia in the United States", publisher: "Migration Policy Institute", year: "2025", dataYears: "2023 ACS",
+      url: "https://www.migrationpolicy.org/journal/spotlight/immigrants-asia-united-states",
+      usedFor: "Immigrant education by country of birth (context)" },
+    { id: "S12", title: "AAPI Data Explorer", publisher: "AAPI Data", year: "n/a", dataYears: "Various",
+      url: "https://explore.aapidata.com/",
+      usedFor: "Existing resource we compare against" },
+    { id: "S13", title: "data.census.gov", publisher: "U.S. Census Bureau", year: "n/a", dataYears: "ACS",
+      url: "https://data.census.gov/",
+      usedFor: "Planned source for tech jobs and pay by subgroup (microdata)" },
+    { id: "S14", title: "UC Information Center", publisher: "University of California", year: "n/a", dataYears: "UC records",
+      url: "https://www.universityofcalifornia.edu/about-us/information-center",
+      usedFor: "Planned source for UC degrees by major and ethnicity" }
+  ]
+};
+/* ======================= END OF SITE DATA ======================= */
+
+
+/* Chart settings for the two measures in the first chart */
+const MEASURES = {
+  degree: {
+    key: "degree",
+    sourceKey: "degreeSource",
+    title: "Bachelor’s degree or higher, ages 25 and older",
+    format: "percent",
+    scaleMax: 1           // bars run from 0% to 100%
+  },
+  income: {
+    key: "income",
+    sourceKey: "incomeSource",
+    title: "Median household income, 2023",
+    format: "dollars",
+    scaleMax: null        // null means the longest bar is the highest value
+  }
+};
+
+const state = { measure: "degree", split: false };
+
+const percentFormat = new Intl.NumberFormat("en-US", { style: "percent", maximumFractionDigits: 1 });
+const dollarFormat = new Intl.NumberFormat("en-US", { style: "currency", currency: "USD", maximumFractionDigits: 0 });
+const countFormat = new Intl.NumberFormat("en-US");
+
+function formatValue(value, format) {
+  return format === "dollars" ? dollarFormat.format(value) : percentFormat.format(value);
+}
+
+function isNumber(v) {
+  return typeof v === "number" && isFinite(v);
+}
+
+function esc(text) {
+  return String(text).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+}
+
+function isSmall(group) {
+  return isNumber(group.population) && group.population < SITE_DATA.smallPopulationThreshold;
+}
+
+function sourceLink(id) {
+  return `<a href="#${id.toLowerCase()}">${esc(id)}</a>`;
+}
+
+/* One labeled bar row. Every cell gets an explicit grid row so the
+   dashed reference line can sit on top of the bars. */
+function barRow(rowNum, label, value, source, barClass, max, measure, options = {}) {
+  const pct = Math.max(0, Math.min(100, (value / max) * 100));
+  const dagger = source === SITE_DATA.daggerSource
+    ? `<span class="dagger" aria-hidden="true">†</span><span class="sr-only"> (source ${esc(source)})</span>`
+    : "";
+  const smallNote = options.small ? `<span class="sr-only"> (fewer than ${countFormat.format(SITE_DATA.smallPopulationThreshold)} people)</span>` : "";
+  return `
+    <div class="lab${options.reference ? " ref-lab" : ""}" style="grid-row:${rowNum}">${esc(label)}${smallNote}</div>
+    <div class="track" style="grid-row:${rowNum}">
+      <div class="scale">
+        <span class="bar ${barClass}" style="width:${pct}%"></span>
+        <span class="val" style="left:${pct}%">${formatValue(value, measure.format)}${dagger}</span>
+      </div>
+    </div>`;
+}
+
+/* ---------- Chart 1, combined vs. subgroups ---------- */
+function renderGroupChart(announce) {
+  const m = MEASURES[state.measure];
+  const sd = SITE_DATA.subgroupData;
+  const hasValue = g => isNumber(g[m.key]);
+  const withValue = sd.groups.filter(hasValue).slice().sort((a, b) => b[m.key] - a[m.key]);
+  const missing = sd.groups.filter(g => !hasValue(g));
+
+  const allValues = [sd.allUS[m.key], sd.combined[m.key], ...withValue.map(g => g[m.key])];
+  const max = m.scaleMax || Math.max(...allValues);
+
+  const bars = document.getElementById("group-bars");
+  bars.dataset.format = m.format;
+
+  let row = 1;
+  let html = "";
+  html += barRow(row++, sd.allUS.name, sd.allUS[m.key], sd.allUS[m.sourceKey], "us", max, m, { reference: true });
+  html += barRow(row++, sd.combined.name, sd.combined[m.key], sd.combined[m.sourceKey], "combined", max, m, { reference: true });
+
+  if (state.split) {
+    html += `<div class="sep" style="grid-row:${row++}" aria-hidden="true"></div>`;
+    withValue.forEach(g => {
+      const small = isSmall(g);
+      html += barRow(row++, g.name, g[m.key], g[m.sourceKey], small ? "small" : "sub", max, m, { small });
+    });
+  }
+
+  const lineFraction = sd.combined[m.key] / max;
+  html += `<div class="ref" style="grid-row:1 / span ${row - 1}" aria-hidden="true">
+             <span class="ref-line" style="left:calc((100% - var(--valspace)) * ${lineFraction})"></span>
+           </div>`;
+  bars.innerHTML = html;
+
+  // Titles and button
+  document.getElementById("group-title").textContent = m.title;
+  document.getElementById("group-sub").textContent = state.split
+    ? `All U.S., the combined Asian American figure, and ${withValue.length} subgroups from highest to lowest`
+    : "All U.S. and the combined Asian American figure";
+
+  const toggle = document.getElementById("split-toggle");
+  toggle.textContent = state.split ? "Show combined only" : `Split into ${withValue.length} subgroups`;
+
+  document.querySelectorAll("[data-split-only]").forEach(el => { el.hidden = !state.split; });
+  document.querySelectorAll("[data-measure]").forEach(btn => {
+    btn.setAttribute("aria-pressed", String(btn.dataset.measure === state.measure));
+  });
+
+  // Notes under the chart
+  const notes = [];
+  const shownSources = state.split ? withValue.map(g => g[m.sourceKey]) : [];
+  if (shownSources.includes(SITE_DATA.daggerSource)) {
+    notes.push(`<span class="dagger">†</span> Figure from AAPI Data, as reported by the Annie E. Casey Foundation (${sourceLink(SITE_DATA.daggerSource)}).`);
+  }
+  if (state.split && withValue.some(isSmall)) {
+    notes.push(`Hatched bars mark groups with fewer than ${countFormat.format(SITE_DATA.smallPopulationThreshold)} people in 2023 (${sourceLink("S3")}).`);
+  }
+  const pewIds = state.split ? `${sourceLink("S1")}, ${sourceLink("S2")}` : sourceLink("S1");
+  const pewLead = notes.length && shownSources.includes(SITE_DATA.daggerSource) ? "Other figures are" : "Figures are";
+  notes.push(`${pewLead} from Pew Research Center (${pewIds}), based on 2021–23 American Community Survey data.`);
+  if (state.split) {
+    const inCombination = sd.groups.filter(g => g.aloneOrInCombination && hasValue(g)).map(g => g.name);
+    if (inCombination.length) {
+      notes.push(`In Pew figures, ${listText(inCombination)} include people who report that origin alone or with another race or origin. All other groups include only people who report that origin alone (${sourceLink("S4")}). Chinese figures do not include people who identify as Taiwanese alone.`);
+    }
+  }
+  document.getElementById("group-notes").innerHTML = notes.map(n => `<p>${n}</p>`).join("");
+
+  // Groups with no figure
+  const missingEl = document.getElementById("group-missing");
+  if (missing.length) {
+    missingEl.innerHTML = missing.map(g => {
+      const note = g.missingNote && g.missingNote[m.key];
+      return note ? `${esc(g.name)} (${esc(note)})` : esc(g.name);
+    }).join(", ");
+  } else {
+    missingEl.textContent = "Every group on this page has a figure for this measure.";
+  }
+
+  if (announce) {
+    document.getElementById("group-status").textContent = state.split
+      ? `Showing ${withValue.length} subgroups for ${m.title.toLowerCase()}.`
+      : `Showing the combined Asian American figure for ${m.title.toLowerCase()}.`;
+  }
+}
+
+function listText(items) {
+  if (items.length < 2) return items.join("");
+  return items.slice(0, -1).join(", ") + " and " + items[items.length - 1];
+}
+
+/* ---------- Chart 2, population share vs. advanced STEM degree share ---------- */
+function renderStemChart() {
+  const t = SITE_DATA.techAndStem;
+  const max = Math.max(...t.groups.flatMap(g => [g.populationShare, g.stemDegreeShare]));
+  const bars = document.getElementById("stem-bars");
+
+  bars.innerHTML = t.groups.map(g => {
+    const popPct = (g.populationShare / max) * 100;
+    const stemPct = (g.stemDegreeShare / max) * 100;
+    return `
+      <div class="lab">${esc(g.name)}</div>
+      <div class="track">
+        <div class="scale">
+          <span class="bar pop" style="width:${popPct}%"></span>
+          <span class="val" style="left:${popPct}%"><span class="sr-only">Population share </span>${percentFormat.format(g.populationShare)}</span>
+        </div>
+        <div class="scale">
+          <span class="bar stem" style="width:${stemPct}%"></span>
+          <span class="val" style="left:${stemPct}%"><span class="sr-only">Advanced STEM degree share </span>${percentFormat.format(g.stemDegreeShare)}</span>
+        </div>
+      </div>`;
+  }).join("");
+}
+
+/* ---------- Sources ---------- */
+function renderSources() {
+  const list = document.getElementById("source-list");
+  list.innerHTML = SITE_DATA.sources.map(s => {
+    const meta = [esc(s.publisher)];
+    if (s.year && s.year !== "n/a") meta[0] += `, ${esc(s.year)}`;
+    let metaText = meta[0] + ".";
+    if (s.dataYears && s.dataYears !== "n/a") metaText += ` Data years ${esc(s.dataYears.replace(/(\d{4})-(\d{2})/g, "$1–$2"))}.`;
+    return `
+      <li id="${s.id.toLowerCase()}">
+        <span class="sid">${esc(s.id)}</span>
+        <div>
+          <a class="src-title" href="${esc(s.url)}">${esc(s.title)}</a>
+          <span class="src-meta">${metaText}</span>
+          <span class="src-use">${esc(s.usedFor)}</span>
+        </div>
+      </li>`;
+  }).join("");
+}
+
+/* ---------- Numbers inside the text, filled from SITE_DATA ---------- */
+function fillText() {
+  const sd = SITE_DATA.subgroupData;
+  const t = SITE_DATA.techAndStem;
+
+  function extremes(key) {
+    const rows = sd.groups.filter(g => isNumber(g[key]));
+    let low = rows[0], high = rows[0];
+    rows.forEach(g => {
+      if (g[key] < low[key]) low = g;
+      if (g[key] > high[key]) high = g;
+    });
+    return { low, high };
+  }
+
+  const degree = extremes("degree");
+  const income = extremes("income");
+  const other = t.groups.find(g => g.name === "Other groups");
+
+  const values = {
+    lastUpdated: SITE_DATA.lastUpdated,
+    threshold: countFormat.format(SITE_DATA.smallPopulationThreshold),
+    stemYear: String(t.year),
+    bachChineseIndian: percentFormat.format(t.includingBachelors.chineseAndIndian),
+    bachFilipinoVietnamese: percentFormat.format(t.includingBachelors.filipinoAndVietnamese),
+    otherPopShare: other ? percentFormat.format(other.populationShare) : "",
+    degreeLow: `${percentFormat.format(degree.low.degree)} for ${degree.low.name} Americans`,
+    degreeHigh: `${percentFormat.format(degree.high.degree)} for ${degree.high.name} Americans`,
+    degreeCombined: percentFormat.format(sd.combined.degree),
+    incomeLow: `${dollarFormat.format(income.low.income)} for ${income.low.name} American households`,
+    incomeHigh: `${dollarFormat.format(income.high.income)} for ${income.high.name} American households`,
+    incomeCombined: dollarFormat.format(sd.combined.income)
+  };
+
+  document.querySelectorAll("[data-fill]").forEach(el => {
+    const v = values[el.dataset.fill];
+    if (v !== undefined) el.textContent = v;
+  });
+}
+
+/* ---------- Controls ---------- */
+document.querySelectorAll("[data-measure]").forEach(btn => {
+  btn.addEventListener("click", () => {
+    state.measure = btn.dataset.measure;
+    renderGroupChart(true);
+  });
+});
+
+document.getElementById("split-toggle").addEventListener("click", () => {
+  state.split = !state.split;
+  renderGroupChart(true);
+});
+
+fillText();
+renderGroupChart(false);
+renderStemChart();
+renderSources();
+</script>
+</body>
+</html>
